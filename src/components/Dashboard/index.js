@@ -63,6 +63,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
 
   return (
     <div className="container">
+      <h1>asdasdasdasdewqdas</h1>
       {!isAdding && !isEditing && (
         <>
           <Header
