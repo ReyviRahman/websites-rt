@@ -1,8 +1,13 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 
+import { getAuth, signOut } from "firebase/auth";
+
 const Logout = ({ setIsAuthenticated }) => {
-  const handleLogout = () => {
+
+  const auth = getAuth();
+  signOut(auth).then(() => {
+    // Sign-out successful.
     Swal.fire({
       icon: 'question',
       title: 'Logging Out',
@@ -18,13 +23,15 @@ const Logout = ({ setIsAuthenticated }) => {
             Swal.showLoading();
           },
           willClose: () => {
-            localStorage.setItem('is_authenticated', false);
             setIsAuthenticated(false);
           },
         });
       }
     });
-  };
+  }).catch((error) => {
+    // An error happened.
+    console.log(error)
+  });
 
   return (
     <button
