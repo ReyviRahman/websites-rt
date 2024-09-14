@@ -63,7 +63,6 @@ const Dashboard = ({ setIsAuthenticated }) => {
 
   return (
     <div className="container">
-      <h1>asdasdasdasdewqdas</h1>
       {!isAdding && !isEditing && (
         <>
           <Header
@@ -91,6 +90,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
           selectedEmployee={selectedEmployee}
           setEmployees={setEmployees}
           setIsEditing={setIsEditing}
+          getEmployees={getEmployees}
         />
       )}
     </div>
