@@ -71,7 +71,7 @@ const Navbar = ({ user }) => {
           </div>
         </div>
       </nav>
-      <ResponsiveMenu open={open}/>
+      <ResponsiveMenu open={open} user={user}/>
 
     </>
   )
