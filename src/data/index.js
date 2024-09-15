@@ -1,3 +1,21 @@
+const NavbarMenu = [
+  {
+    id:1,
+    title: 'Beranda',
+    link: '/'
+  },
+  {
+    id: 2,
+    title: 'Data Penduduk',
+    link: '#'
+  },
+  {
+    id:3,
+    title: 'Galeri',
+    link: '#'
+  },
+]
+
 const employeesData = [
   {
     id: 1,
@@ -81,4 +99,4 @@ const employeesData = [
   },
 ];
 
-export { employeesData };
+export { employeesData, NavbarMenu };

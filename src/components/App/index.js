@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
 
 import Login from '../Login';
 import Dashboard from '../Dashboard';
+import Navbar from '../Navbar/Navbar';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -11,13 +13,16 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      {isAuthenticated ? (
-        <Dashboard setIsAuthenticated={setIsAuthenticated} />
-      ) : (
-        <Login setIsAuthenticated={setIsAuthenticated} />
-      )}
-    </>
+    <div>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+
+    </div>
   );
 };
 
