@@ -9,7 +9,7 @@ import Edit from './Edit';
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from '../../config/firestore'
 
-const Dashboard = ({ setIsAuthenticated }) => {
+const DashboardAdmin = ({ setIsAuthenticated }) => {
   const [employees, setEmployees] = useState();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -97,4 +97,4 @@ const Dashboard = ({ setIsAuthenticated }) => {
   );
 };
 
-export default Dashboard;
+export default DashboardAdmin;

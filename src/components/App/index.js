@@ -4,21 +4,50 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import Login from '../Login';
 import Dashboard from '../Dashboard';
 import Navbar from '../Navbar/Navbar';
+import DashboardAdmin from '../DashboardAdmin'
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const auth = getAuth()
+  const [user, setUser] = useState(null)
+  const [isFetching, setIsFetching] = useState(true)
 
   useEffect(() => {
-    setIsAuthenticated(JSON.parse(localStorage.getItem('is_authenticated')));
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user)
+        setIsFetching(false)
+        return
+      }
+      setIsFetching(false)
+      setUser(null)
+    })
+    return () => unsubscribe()
+  }, [])
+  
+  if (isFetching) {
+    return <h2>Loading...</h2>
+  }
 
   return (
     <div>
       <Router>
-        <Navbar />
+        {user ? (
+          <Navbar user={user}/>
+        ) : (
+          <Navbar user={null}/>
+        )}
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
+          <Route
+            path='/DashboardAdmin'
+            element={
+              <ProtectedRoute user={user}>
+                <DashboardAdmin></DashboardAdmin>
+              </ProtectedRoute>
+            }/>
         </Routes>
       </Router>
 

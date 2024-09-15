@@ -3,7 +3,6 @@ import Swal from 'sweetalert2';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom'
 
-
 const Login = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState();
@@ -23,7 +22,7 @@ const Login = () => {
       });
       await signInWithEmailAndPassword(auth, email, password)
       Swal.close()
-      navigate('/')
+      navigate('/DashboardAdmin')
     } catch (error) {
       Swal.fire({
         timer: 1500,

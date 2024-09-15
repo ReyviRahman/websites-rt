@@ -16,6 +16,29 @@ const NavbarMenu = [
   },
 ]
 
+const NavbarMenuAdmin = [
+  {
+    id:1,
+    title: 'Beranda',
+    link: '/'
+  },
+  {
+    id: 2,
+    title: 'Data Penduduk',
+    link: '#'
+  },
+  {
+    id:3,
+    title: 'Galeri',
+    link: '#'
+  },
+  {
+    id:4,
+    title: 'Dashboard Admin',
+    link: '/DashboardAdmin'
+  },
+]
+
 const employeesData = [
   {
     id: 1,
@@ -99,4 +122,4 @@ const employeesData = [
   },
 ];
 
-export { employeesData, NavbarMenu };
+export { employeesData, NavbarMenu, NavbarMenuAdmin };
