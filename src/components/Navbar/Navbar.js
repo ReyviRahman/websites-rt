@@ -1,8 +1,5 @@
 import { NavbarMenu, NavbarMenuAdmin } from '../../data'
-import { FaSearch } from "react-icons/fa"
-import { FaDumbbell } from "react-icons/fa6"
 import { MdMenu } from "react-icons/md"
-import { FaShoppingCart } from "react-icons/fa"
 import imgLogo from '../../assets/images/logo-website.jpeg'
 import { useState } from 'react'
 import ResponsiveMenu from './ResponsiveMenu'
