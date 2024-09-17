@@ -31,7 +31,7 @@ const Navbar = ({ user }) => {
                   NavbarMenuAdmin.map((item) => {
                     return (
                       <li key={item.id}>
-                        <a href={item.link} className='inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
+                        <a onClick={() => {navigate(item.link)}} className='inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
                       </li>
                     )
                   })

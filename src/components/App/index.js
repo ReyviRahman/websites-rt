@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
-import Login from '../Login';
+import Login from '../Login/Login';
 import Dashboard from '../Dashboard';
 import Navbar from '../Navbar/Navbar';
 import DashboardAdmin from '../DashboardAdmin'
@@ -42,11 +42,12 @@ const App = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
           <Route
-            path='/DashboardAdmin'
+            path='/dashboardadmin'
             element={
-              <ProtectedRoute user={user}>
-                <DashboardAdmin></DashboardAdmin>
-              </ProtectedRoute>
+              // <ProtectedRoute user={user}>
+              //   <DashboardAdmin></DashboardAdmin>
+              // </ProtectedRoute>
+                <DashboardAdmin />
             }/>
         </Routes>
       </Router>

@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
-
-import Header from './Header';
-import Table from './Table';
-import Add from './Add';
-import Edit from './Edit';
 
 import imgControl from '../../assets/images/control.png'
 import imgAdmin from '../../assets/images/shield_person.png'
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
-import { db } from '../../config/firestore'
-import Sidebar from '../Sidebar/Sidebar';
-import { MdAdminPanelSettings } from 'react-icons/md';
-import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 const DashboardAdmin = () => {
   const [open, setOpen] = useState(true);
@@ -87,7 +76,7 @@ const DashboardAdmin = () => {
         </ul>
       </div>
       <div className="h-screen flex-1 p-7">
-        <h1 className="text-2xl font-semibold ">Home Page</h1>
+        <h1 className="text-2xl font-semibold ">Home Page daskjadskj</h1>
       </div>
     </div>
   );

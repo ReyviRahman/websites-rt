@@ -22,7 +22,7 @@ const Login = () => {
       });
       await signInWithEmailAndPassword(auth, email, password)
       Swal.close()
-      navigate('/DashboardAdmin')
+      navigate('/dashboardadmin')
     } catch (error) {
       Swal.fire({
         timer: 1500,

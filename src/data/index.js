@@ -35,7 +35,7 @@ const NavbarMenuAdmin = [
   {
     id:4,
     title: 'Dashboard Admin',
-    link: '/DashboardAdmin'
+    link: '/dashboardadmin'
   },
 ]
 
