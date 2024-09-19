@@ -76,7 +76,7 @@ const SuratPengantar = () => {
       <h1 className='text-3xl font-semibold mt-3'>Layanan Surat Pengantar RT</h1>
 
       <div className='flex justify-center mt-5'>
-        <form onSubmit={handleUpload} className='border border-primary rounded px-6 py-4 form-w' >
+        <form onSubmit={handleUpload} className='mb-10 border border-primary rounded px-6 py-4 form-w' >
           <h1 className='text-2xl font-bold mb-2 text-center'>Masukkan Berkas</h1>
 
           <label htmlFor="nama" className="block mb-3">
