@@ -38,7 +38,14 @@ const SuratPengantar = () => {
       const kkUrl = fileKK ? await uploadFile(fileKK, `KK`) : null;
 
       // Tambahkan data ke Firestore
-      const tanggalPengajuan = new Date().toISOString().split('T')[0];
+      const now = new Date();
+
+      // Mengonversi waktu ke UTC+7 (Waktu Indonesia)
+      const offset = now.getTimezoneOffset() * 60000; // Perbedaan waktu dari UTC dalam milidetik
+      const wibTime = new Date(now.getTime() + (7 * 60 * 60 * 1000) - offset);
+
+      // Mengambil tanggal dengan format YYYY-MM-DD
+      const tanggalPengajuan = wibTime.toISOString().split('T')[0];
       console.log(`ini keperluan surat ${keperluanSurat}`)
       const docRef = await addDoc(collection(db, COLLECTION_BERKAS), {
         nama,
