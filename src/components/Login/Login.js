@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container flex justify-center items-center h-screen">
+    <div className="container flex justify-center items-center h-screen border border-primary">
       <form className='border border-primary rounded px-6 py-4 form-w' onSubmit={handleLogin}>
         <h1 className='text-2xl font-bold mb-2'>Admin Login</h1>
 

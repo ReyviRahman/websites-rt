@@ -5,6 +5,8 @@ import { useState } from 'react'
 import ResponsiveMenu from './ResponsiveMenu'
 import { useNavigate } from 'react-router-dom'
 import { signOut, getAuth } from 'firebase/auth'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const Navbar = ({ user }) => {
   const [open, setOpen] = useState(false)
@@ -31,7 +33,7 @@ const Navbar = ({ user }) => {
                   NavbarMenuAdmin.map((item) => {
                     return (
                       <li key={item.id}>
-                        <a onClick={() => {navigate(item.link)}} className='inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
+                        <a onClick={() => {navigate(item.link)}} className='cursor-pointer inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
                       </li>
                     )
                   })
@@ -43,7 +45,7 @@ const Navbar = ({ user }) => {
                   NavbarMenu.map((item) => {
                     return (
                       <li key={item.id}>
-                        <a href={item.link} className='inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
+                        <a onClick={() => {navigate(item.link)}} className='cursor-pointer inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
                       </li>
                     )
                   })
@@ -51,6 +53,38 @@ const Navbar = ({ user }) => {
               </>
               
             )}
+            <Menu as="div" className="relative inline-block text-left">
+      <div>
+        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-bold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary">
+          Layanan
+          <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-white" />
+        </MenuButton>
+      </div>
+
+      <MenuItems
+        transition
+        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+      >
+        <div className="py-1">
+          <MenuItem>
+            <a
+              onClick={() => {navigate('/suratpengantar')}}
+              className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
+            >
+              Surat Pengantar
+            </a>
+          </MenuItem>
+          <MenuItem>
+            <a
+              onClick={() => {navigate('/statussurat')}}
+              className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
+            >
+              Cek Status Surat
+            </a>
+          </MenuItem>
+        </div>
+      </MenuItems>
+    </Menu>
             </ul>
           </div>
           {user ? (

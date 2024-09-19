@@ -7,6 +7,9 @@ import Navbar from '../Navbar/Navbar';
 import DashboardAdmin from '../DashboardAdmin'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
+import Swal from 'sweetalert2';
+import SuratPengantar from '../SuratPengantar'
+import StatusSurat from '../StatusSurat';
 
 const App = () => {
   const auth = getAuth()
@@ -27,7 +30,16 @@ const App = () => {
   }, [])
   
   if (isFetching) {
-    return <h2>Loading...</h2>
+    Swal.fire({
+      title: 'Loading...',
+      text: 'Mohon Tunggu',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+  } else {
+    Swal.close();
   }
 
   return (
@@ -41,13 +53,14 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/suratpengantar" element={<SuratPengantar />} />
+          <Route path="/statussurat" element={<StatusSurat />} />
           <Route
             path='/dashboardadmin'
             element={
-              // <ProtectedRoute user={user}>
-              //   <DashboardAdmin></DashboardAdmin>
-              // </ProtectedRoute>
-                <DashboardAdmin />
+              <ProtectedRoute user={user}>
+                <DashboardAdmin></DashboardAdmin>
+              </ProtectedRoute>
             }/>
         </Routes>
       </Router>

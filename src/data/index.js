@@ -11,7 +11,7 @@ const NavbarMenu = [
   },
   {
     id:3,
-    title: 'Galeri',
+    title: 'Keuangan',
     link: '#'
   },
 ]
@@ -29,7 +29,7 @@ const NavbarMenuAdmin = [
   },
   {
     id:3,
-    title: 'Galeri',
+    title: 'Keuangan',
     link: '#'
   },
   {
