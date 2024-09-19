@@ -40,7 +40,7 @@ const StatusSurat = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.tanggalPengajuan}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.nama}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keperluanSurat}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.status}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.statusSurat}</td>
               </tr>
             ))}
           </tbody>

@@ -51,7 +51,7 @@ const SuratPengantar = () => {
         ktpUrl,
         kkUrl,
         tanggalPengajuan, // Menambahkan tanggal pengajuan
-        status: 'Terkirim'
+        statusSurat: 'Terkirim'
       });
 
       Swal.fire({
