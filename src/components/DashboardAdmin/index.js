@@ -2,25 +2,21 @@ import React, { useState, useEffect } from 'react';
 
 import imgControl from '../../assets/images/control.png'
 import imgAdmin from '../../assets/images/shield_person.png'
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const DashboardAdmin = () => {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(true);
-  const [clickedIndex, setClickedIndex] = useState(false);
+  const [index, setIndex] = useState(null);
+
   const Menus = [
-    { title: "Dashboard", src: "Chart_fill" },
-    { title: "Inbox", src: "Chat" },
-    { title: "Accounts", src: "User", gap: true },
-    { title: "Schedule ", src: "Calendar" },
-    { title: "Search", src: "Search" },
-    { title: "Analytics", src: "Chart" },
-    { title: "Files ", src: "Folder", gap: true },
-    { title: "Setting", src: "Setting" },
+    { title: "Proses Surat", src: "Chart_fill", link: "/dashboardadmin/prosessurat" },
+    { title: "Jumlah Penduduk", src: "Chart_fill", link: "/dashboardadmin/jumlahpenduduk" },
   ];
 
-  const handleClick = (index) => {
-    setClickedIndex(index === clickedIndex ? null : index); // Toggle item yang diklik
+  const handleClick = (i) => {
+    setIndex(i === index ? null : i); // Toggle item yang diklik
   };
-
   const marginTop = {
     marginTop: '50px'
   };
@@ -48,24 +44,30 @@ const DashboardAdmin = () => {
             }`}
           />
           <h1
-            className={`text-white origin-left font-medium text-xl duration-200 ${
+            className={`cursor-pointer text-white origin-left font-medium text-xl duration-200 ${
               !open && "scale-0"
             }`}
+            onClick={() => {
+              navigate("/dashboardadmin/admin")
+              setIndex(null)
+            }}
           >
             Dashboard Admin
           </h1>
         </div>
         <ul className="pt-6">
-          {Menus.map((Menu, index) => (
+        {Menus.map((Menu, i) => (
             <li
-            onClick={() => handleClick(index)}
-              key={index}
+              onClick={() => {
+                handleClick(i)
+                navigate(Menu.link)
+              }
+              }
+              key={i}
               className={`${
-                clickedIndex === index ? 'bg-secondary font-bold text-white' : 'font-semibold'
-              } flex rounded-md p-2 cursor-pointer  text-gray-300 hover:bg-secondary hover:text-white text-sm items-center gap-x-4 
-              ${Menu.gap ? "mt-9" : "mt-2"} ${
-                index === 0 && "bg-light-white"
-              } `}
+                index === i ? 'bg-secondary font-bold text-white' : 'font-semibold'
+              } flex rounded-md p-2 cursor-pointer text-gray-300 hover:bg-secondary hover:text-white text-sm items-center gap-x-4 
+              ${Menu.gap ? "mt-9" : "mt-2"} ${i === 0 && "bg-light-white"}`}
             >
               <img src={Menu.src} />
               <span className={`${!open && "hidden"} origin-left duration-200`}>
@@ -76,7 +78,7 @@ const DashboardAdmin = () => {
         </ul>
       </div>
       <div className="h-screen flex-1 p-7">
-        <h1 className="text-2xl font-semibold ">Home Page daskjadskj</h1>
+        <Outlet />
       </div>
     </div>
   );

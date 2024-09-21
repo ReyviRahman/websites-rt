@@ -10,6 +10,9 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import Swal from 'sweetalert2';
 import SuratPengantar from '../SuratPengantar'
 import StatusSurat from '../StatusSurat';
+import ProsesSurat from '../ProsesSurat';
+import JumlahPenduduk from '../JumlahPenduduk';
+import Admin from '../Admin';
 
 const App = () => {
   const auth = getAuth()
@@ -61,7 +64,11 @@ const App = () => {
               <ProtectedRoute user={user}>
                 <DashboardAdmin></DashboardAdmin>
               </ProtectedRoute>
-            }/>
+            }>
+              <Route path="admin" element={<Admin />} />
+              <Route path="prosessurat" element={<ProsesSurat />} />
+              <Route path="jumlahpenduduk" element={<JumlahPenduduk />} />
+          </Route>
         </Routes>
       </Router>
 

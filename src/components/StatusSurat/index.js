@@ -30,7 +30,7 @@ const StatusSurat = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Pengajuan</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Surat</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Status</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -40,7 +40,7 @@ const StatusSurat = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.tanggalPengajuan}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.nama}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keperluanSurat}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.statusSurat}</td>
+                <td className="px-6  py-4 whitespace-nowrap text-sm text-white flex justify-center"><h1 className='bg-primary rounded px-2 py-1'>{item.statusSurat}</h1></td>
               </tr>
             ))}
           </tbody>
