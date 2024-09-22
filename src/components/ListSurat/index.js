@@ -12,6 +12,7 @@ const ListSurat = () => {
       const querySnapshot = await getDocs(collection(db, COLLECTION_BERKAS));
       const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setData(items);
+      console.log(data)
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -38,6 +39,7 @@ const ListSurat = () => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KTP</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KK</th>
             <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Status</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -54,8 +56,21 @@ const ListSurat = () => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keperluanSurat}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.ktpUrl}`} className="text-blue-500 underline hover:text-blue-700">KTP.Pdf</a></td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.kkUrl}`} className="text-blue-500 underline hover:text-blue-700">KK.Pdf</a></td>
-              <td className="px-6  py-4 whitespace-nowrap text-sm text-white flex justify-center"><h1 className='cursor-pointer bg-primary rounded px-2 py-1'
-              onClick={() => navigate(`/dashboardadmin/prosessurat/${item.id}`)}>{item.statusSurat}</h1></td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-white flex justify-center">
+                <h1 
+                  className={`cursor-pointer rounded px-2 py-1 ${item.statusSurat === 'DiTerima' ? 'bg-green-500' : item.statusSurat === 'DiTolak' ? 'bg-red-500' : 'bg-primary'}`}
+                  onClick={() => navigate(`/dashboardadmin/prosessurat/${item.id}`)}
+                >
+                  {item.statusSurat}
+                </h1>
+              </td>
+              {item.statusSurat === 'DiTerima' ? (
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.suratBalasan}`} className="text-blue-500 underline hover:text-blue-700">Download Surat Balasan</a></td>
+              ) : item.statusSurat === 'DiTolak' ? (
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.alasanPenolakan}</td>
+              ) : (
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Sedang DiProses</td>
+              )}
             </tr>
           ))}
         </tbody>

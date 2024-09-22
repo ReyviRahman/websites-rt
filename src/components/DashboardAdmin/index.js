@@ -28,7 +28,7 @@ const DashboardAdmin = () => {
       <div
         className={`${
           open ? "w-72" : "w-20 "
-        } bg-primary h-screen p-5 pt-8 relative duration-300`}
+        } bg-primary min-h-screen p-5 pt-8 relative duration-300`}
       >
         <img
           src={imgControl}
@@ -79,7 +79,7 @@ const DashboardAdmin = () => {
           ))}
         </ul>
       </div>
-      <div className="h-screen flex-1">
+      <div className="min-h-screen flex-1">
         <Outlet />
       </div>
     </div>

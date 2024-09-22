@@ -3,6 +3,7 @@ import { db, storage, COLLECTION_BERKAS } from '../../config/firestore'
 import Swal from 'sweetalert2'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Untuk Firebase Storage
 import { collection, addDoc, setDoc } from "firebase/firestore"; 
+import { useNavigate } from 'react-router-dom';
 
 const SuratPengantar = () => {
   const [nama, setNama] = useState('');
@@ -14,6 +15,7 @@ const SuratPengantar = () => {
   const [keperluanSurat, setKeperluanSurat] = useState('Pembuatan KTP');
   const [fileKTP, setFileKTP] = useState(null);
   const [fileKK, setFileKK] = useState(null);
+  const navigate = useNavigate()
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -58,7 +60,9 @@ const SuratPengantar = () => {
         ktpUrl,
         kkUrl,
         tanggalPengajuan, // Menambahkan tanggal pengajuan
-        statusSurat: 'Terkirim'
+        statusSurat: 'Terkirim',
+        suratBalasan: '',
+        alasanPenolakan: ''
       });
 
       await setDoc(docRef, { id: docRef.id }, { merge: true });
@@ -68,6 +72,10 @@ const SuratPengantar = () => {
         text: 'Berkas Terkirim',
         icon: 'success',
         confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/statussurat')
+        }
       });
 
     } catch (error) {
