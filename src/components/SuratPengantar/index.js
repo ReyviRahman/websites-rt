@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { db, storage, COLLECTION_BERKAS } from '../../config/firestore'
 import Swal from 'sweetalert2'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Untuk Firebase Storage
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, setDoc } from "firebase/firestore"; 
 
 const SuratPengantar = () => {
   const [nama, setNama] = useState('');
@@ -46,7 +46,7 @@ const SuratPengantar = () => {
 
       // Mengambil tanggal dengan format YYYY-MM-DD
       const tanggalPengajuan = wibTime.toISOString().split('T')[0];
-      console.log(`ini keperluan surat ${keperluanSurat}`)
+
       const docRef = await addDoc(collection(db, COLLECTION_BERKAS), {
         nama,
         nik,
@@ -60,6 +60,8 @@ const SuratPengantar = () => {
         tanggalPengajuan, // Menambahkan tanggal pengajuan
         statusSurat: 'Terkirim'
       });
+
+      await setDoc(docRef, { id: docRef.id }, { merge: true });
 
       Swal.fire({
         title: 'Sukses!',

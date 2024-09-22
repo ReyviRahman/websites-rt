@@ -13,6 +13,8 @@ import StatusSurat from '../StatusSurat';
 import ProsesSurat from '../ProsesSurat';
 import JumlahPenduduk from '../JumlahPenduduk';
 import Admin from '../Admin';
+import DetailSurat from '../DetailSurat';
+import ListSurat from '../ListSurat';
 
 const App = () => {
   const auth = getAuth()
@@ -66,7 +68,10 @@ const App = () => {
               </ProtectedRoute>
             }>
               <Route path="admin" element={<Admin />} />
-              <Route path="prosessurat" element={<ProsesSurat />} />
+              <Route path="prosessurat" element={<ProsesSurat />}>
+                <Route path=":id" element={<DetailSurat />} />
+                <Route path="listsurat" element={<ListSurat />} />
+              </Route>
               <Route path="jumlahpenduduk" element={<JumlahPenduduk />} />
           </Route>
         </Routes>
