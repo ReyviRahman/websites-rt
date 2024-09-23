@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db, COLLECTION_BERKAS } from '../../config/firestore';
+import React from 'react';
+
 import iconProsesSurat from '../../assets/images/icon-proses-surat-primary.png';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 
 const ProsesSurat = () => {

@@ -17,6 +17,17 @@ const Navbar = ({ user }) => {
       .then(() => console.log("Sign Out"))
       .catch((error) => console.log(error))
   }
+  const [index, setIndex] = useState(0);
+  const [indexAdmin, setIndexAdmin] = useState(3);
+
+  const handleClick = (i) => {
+    setIndex(i === index ? null : i); 
+  };
+
+  const handleClickAdmin = (i) => {
+    setIndexAdmin(i === indexAdmin ? null : i); 
+  };
+
   return (
     <>
       <nav className='bg-primary navbar'>
@@ -30,10 +41,13 @@ const Navbar = ({ user }) => {
             {user ? (
               <>
                 {
-                  NavbarMenuAdmin.map((item) => {
+                  NavbarMenuAdmin.map((item, i) => {
                     return (
-                      <li key={item.id}>
-                        <a onClick={() => {navigate(item.link)}} className='cursor-pointer inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
+                      <li key={i}>
+                        <a onClick={() => {
+                          handleClickAdmin(i)
+                          navigate(item.link)
+                          }} className={`${indexAdmin === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3 font-semibold`}>{item.title}</a>
                       </li>
                     )
                   })
@@ -42,10 +56,13 @@ const Navbar = ({ user }) => {
             ) : (
               <>
                 {
-                  NavbarMenu.map((item) => {
+                  NavbarMenu.map((item, i) => {
                     return (
-                      <li key={item.id}>
-                        <a onClick={() => {navigate(item.link)}} className='cursor-pointer inline-block py-1 px-3 hover:text-secondary font-semibold'>{item.title}</a>
+                      <li key={i}>
+                        <a onClick={() => {
+                          handleClick(i)
+                          navigate(item.link)
+                          }} className={`${index === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3  font-semibold`}>{item.title}</a>
                       </li>
                     )
                   })
