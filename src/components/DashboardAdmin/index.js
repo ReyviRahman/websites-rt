@@ -13,7 +13,7 @@ const DashboardAdmin = () => {
 
   const Menus = [
     { icon:iconProsesSurat ,  title: "Proses Surat",  link: "/dashboardadmin/prosessurat/listsurat" },
-    { icon:iconJmlPenduduk ,  title: "Jumlah Penduduk",  link: "/dashboardadmin/jumlahpenduduk" },
+    { icon:iconJmlPenduduk ,  title: "Data Penduduk",  link: "/dashboardadmin/datapenduduk/listpenduduk" },
   ];
 
   const handleClick = (i) => {

@@ -11,10 +11,12 @@ import Swal from 'sweetalert2';
 import SuratPengantar from '../SuratPengantar'
 import StatusSurat from '../StatusSurat';
 import ProsesSurat from '../ProsesSurat';
-import JumlahPenduduk from '../JumlahPenduduk';
+import DataPenduduk from '../JumlahPenduduk';
 import Admin from '../Admin';
 import DetailSurat from '../DetailSurat';
 import ListSurat from '../ListSurat';
+import ListPenduduk from '../JumlahPenduduk/ListPenduduk';
+import Add from '../JumlahPenduduk/Add';
 
 const App = () => {
   const auth = getAuth()
@@ -72,7 +74,10 @@ const App = () => {
                 <Route path=":id" element={<DetailSurat />} />
                 <Route path="listsurat" element={<ListSurat />} />
               </Route>
-              <Route path="jumlahpenduduk" element={<JumlahPenduduk />} />
+              <Route path="datapenduduk" element={<DataPenduduk />}>
+                <Route path="listpenduduk" element={<ListPenduduk />} />
+                <Route path="add" element={<Add />} />
+              </Route>
           </Route>
         </Routes>
       </Router>
