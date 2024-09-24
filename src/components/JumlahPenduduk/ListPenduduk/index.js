@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, COLLECTION_BERKAS } from '../../../config/firestore'; 
+import { db, COLLECTION_PENDUDUK } from '../../../config/firestore'; 
 
 const ListPenduduk = () => {
   const [data, setData] = useState([]);
@@ -9,7 +9,7 @@ const ListPenduduk = () => {
 
   const fetchData = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, COLLECTION_BERKAS));
+      const querySnapshot = await getDocs(collection(db, COLLECTION_PENDUDUK));
       const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setData(items);
       console.log(data)
@@ -25,7 +25,8 @@ const ListPenduduk = () => {
   return (
     <div className="bg-white">
       <div className='flex justify-end'>
-      <button type="button" class="bg-green-500 text-white font-bold py-1 px-5 rounded-md hover:bg-green-600">
+      <button type="button" onClick={() => navigate('/dashboardadmin/datapenduduk/add')} class="bg-green-500 text-white font-bold py-1 px-5 rounded-md hover:bg-green-600"
+      >
         Tambah Data
       </button>
 
@@ -34,20 +35,40 @@ const ListPenduduk = () => {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Lengkap</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit Data</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hapus Data</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((item, index) => (
             <tr key={item.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.tanggalPengajuan}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.nama}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.nik}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.nik}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.jabatan}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <img src={item.fotoUrl} width={120} alt="" />
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keterangan}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <button 
+                  type="button" 
+                  className="bg-blue-500 text-white font-bold py-1 px-3 rounded-md hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <button 
+                  type="button" 
+                  className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600"
+                >
+                  Hapus
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

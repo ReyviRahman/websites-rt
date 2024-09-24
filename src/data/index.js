@@ -7,7 +7,7 @@ const NavbarMenu = [
   {
     id: 2,
     title: 'Data Penduduk',
-    link: '#'
+    link: '/datapenduduk'
   },
   {
     id:3,
@@ -25,7 +25,7 @@ const NavbarMenuAdmin = [
   {
     id: 2,
     title: 'Data Penduduk',
-    link: '#'
+    link: '/datapenduduk'
   },
   {
     id:3,

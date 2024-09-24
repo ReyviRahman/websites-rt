@@ -21,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const COLLECTION_BERKAS = "berkas";
+const COLLECTION_PENDUDUK = "penduduk";
 // Initialize Cloud Firestore and get a reference to the service
-export { db, storage, COLLECTION_BERKAS };
+export { db, storage, COLLECTION_BERKAS, COLLECTION_PENDUDUK };
 

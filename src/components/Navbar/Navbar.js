@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { signOut, getAuth } from 'firebase/auth'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import imgTangan from '../../assets/images/img-tangan.png'
 
 const Navbar = ({ user }) => {
   const [open, setOpen] = useState(false)
@@ -31,9 +32,9 @@ const Navbar = ({ user }) => {
   return (
     <>
       <nav className='bg-primary navbar'>
-        <div className="container flex justify-between items-center py-3">
+        <div className="container flex justify-between items-center">
           <div className='text-2xl font-bold flex items-center gap-2'>
-            <img src={imgLogo} className='img-logo' alt='...'></img>
+            <img src={imgTangan} className='img-logo' alt='...'></img>
             <p className='text-white cursor-pointer' onClick={() => navigate('/')}>Website RT</p>
           </div>
           <div className='hidden md:block'>

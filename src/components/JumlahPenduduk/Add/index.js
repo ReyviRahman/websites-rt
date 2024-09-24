@@ -1,10 +1,72 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Untuk Firebase Storage
+import { db, storage, COLLECTION_PENDUDUK } from '../../../config/firestore'
+import { collection, addDoc, setDoc } from "firebase/firestore"; 
+
 
 const Add = () => {
+  const [nama, setNama] = useState('')
+  const [jabatan, setJabatan] = useState('')
+  const [fileFoto, setFileFoto] = useState(null)
+  const [keterangan, setKeterangan] = useState('')
+  const navigate = useNavigate()
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+
+    Swal.fire({
+      title: 'Uploading...',
+      text: 'Mohon tunggu, data sedang di-upload.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // Menampilkan indikator loading
+      }
+    });
+    try {
+      const uploadFile = async (file, folder) => {
+        const storageRef = ref(storage, `${folder}/${file.name}`);
+        await uploadBytes(storageRef, file);
+        return getDownloadURL(storageRef); // Mendapatkan URL download dari file
+      };
+
+      const fotoUrl = fileFoto ? await uploadFile(fileFoto, `FotoWarga`) : null;
+      
+      const docRef = await addDoc(collection(db, COLLECTION_PENDUDUK), {
+        nama,
+        jabatan,
+        fotoUrl,
+        keterangan
+      });
+
+      await setDoc(docRef, { id: docRef.id }, { merge: true });
+
+      Swal.fire({
+        title: 'Sukses!',
+        text: 'Berkas Terkirim',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/dashboardadmin/datapenduduk/listpenduduk')
+        }
+      });
+
+    } catch (error) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Terjadi kesalahan saat menambahkan data.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  };
+
   return (
     <div className='flex justify-center'>
       <form onSubmit={handleUpload} className='mb-10 border border-primary rounded px-6 py-2 form-w' >
-        <h1 className='text-2xl font-semibold mb-2 text-center'>{`Berkas ${surat.nama}`}</h1>
+        <h1 className='text-xl font-semibold mb-2 text-center'>Tambah Data Penduduk</h1>
         <label htmlFor="nama" className="block mb-3">
           <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
             Nama Lengkap
@@ -13,147 +75,53 @@ const Add = () => {
           id="nama"
           type="text"
           name="nama"
-          value={surat.nama}
-          disabled={true} />
+          placeholder="Masukkan Nama Lengkap"
+          value={nama}
+          onChange={e => setNama(e.target.value)} />
         </label>
 
-        <label htmlFor="nik" className="block mb-3">
+        <label htmlFor="jabatan" className="block mb-3">
           <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Nomor NIK
+            Jabatan
           </span>
           <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="nik"
+          id="jabatan"
           type="text"
-          name="nik"
-          value={surat.nik}
-          disabled={true} />
+          name="jabatan"
+          placeholder="Warga Sipil"
+          value={jabatan}
+          onChange={e => setJabatan(e.target.value)} />
         </label>
 
-        <label htmlFor="ttl" className="block mb-3">
+        <label htmlFor="fileFoto" className="block mb-3">
           <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Tempat, Tanggal Lahir
+            Upload Foto
+          </span>
+          <input
+            className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
+            id="fileFoto"
+            type="file"
+            name="fileFoto"
+            onChange={(e) => setFileFoto(e.target.files[0])} // Mengambil file yang dipilih
+          />
+        </label>
+
+        <label htmlFor="keterangan" className="block mb-3">
+          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            Keterangan
           </span>
           <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="ttl"
+          id="keterangan"
           type="text"
-          name="ttl"
-          value={surat.ttl}
-          disabled={true} />
+          name="keterangan"
+          placeholder="Masih Hidup / Almarhum"
+          value={keterangan}
+          onChange={e => setKeterangan(e.target.value)} />
         </label>
 
-        <label htmlFor="agama" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Agama
-          </span>
-          <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="agama"
-          type="text"
-          name="agama"
-          value={surat.agama}
-          disabled={true} />
-        </label>
-
-        <label htmlFor="status" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Status
-          </span>
-          <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="status"
-          type="text"
-          name="status"
-          value={surat.status}
-          disabled={true} />
-        </label>
-
-        <label htmlFor="alamat" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Alamat Lengkap
-          </span>
-          <textarea rows={4} className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="alamat"
-          type="alamat"
-          name="alamat"
-          disabled={true}
-          value={surat.alamat}/>
-        </label>
-
-        <label htmlFor="status" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Jenis Keperluan Surat
-          </span>
-          <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="status"
-          type="text"
-          name="status"
-          value={surat.keperluanSurat}
-          disabled={true} />
-        </label>
-
-        <label htmlFor="status" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            KTP
-          </span>
-          <a target="_blank" href={`${surat.ktpUrl}`} className="text-blue-500 underline hover:text-blue-700">Lihat KTP</a>
-        </label>
-
-        <label htmlFor="status" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            KK
-          </span>
-          <a target="_blank" href={`${surat.kkUrl}`} className="text-blue-500 underline hover:text-blue-700">Lihat KK</a>
-        </label>
-
-        <h1 className='text-xl font-semibold mb-2 text-center'>Terima Permohonan Surat?</h1>
-        <div className='flex gap-3 mb-3'>
-          <button type='button' className="w-full bg-green-500 text-white font-bold p-1 rounded-md hover:bg-green-600 text-sm"
-          onClick={clickYaButton}>
-              Ya
-          </button>
-          <button type='button' className="w-full bg-red-500 text-white font-bold p-1 rounded-md hover:bg-red-600 text-sm"
-          onClick={clickTidakButton}>
-              Tidak
-            </button>
-        </div>
-        { showYa && (
-          <>
-            <label htmlFor="fileBalasan" className="block mb-3">
-              <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-                Upload Surat Balasan
-              </span>
-              <input
-                className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-                id="fileBalasan"
-                type="file"
-                name="fileBalasan"
-                onChange={(e) => setfileBalasan(e.target.files[0])} // Mengambil file yang dipilih
-              />
-            </label>
-            <button type="submit" className="mt-2 mb-2 w-full bg-primary text-white font-bold p-2 rounded-md hover:bg-blue-600">
-            Kirim
-          </button>
-          </>
-          
-        )}
-        { showTidak && (
-          <>
-            <label htmlFor="alasanPenolakan" className="block mb-3">
-              <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-                Alasan Penolakan
-              </span>
-              <textarea rows={4} className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-              id="alasanPenolakan"
-              type="text"
-              name="alasanPenolakan"
-              placeholder="Berikan Alasan Penolakan"
-              value={alasanPenolakan}
-              onChange={e => setAlasanPenolakan(e.target.value)} />
-            </label>
-            <button type="submit" className="mt-2 mb-2 w-full bg-primary text-white font-bold p-2 rounded-md hover:bg-blue-600">
-              Kirim
-            </button>
-          </>
-          
-        )}
+        <button type="submit" className="mt-2 w-full bg-primary text-white font-bold p-2 rounded-md hover:bg-blue-600">
+          Tambahkan Data
+        </button>
       </form>
     </div>
   )
