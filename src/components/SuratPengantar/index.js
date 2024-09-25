@@ -242,7 +242,7 @@ const SuratPengantar = () => {
         <div className="flex items-center space-x-4 ">
           <img className="w-32 h-32 object-cover" src={imgTangan} alt="" />
           <div>
-            <p className='text-white'>Perumahan yeyes lestari III, RT 38, kelurahan kenali besar kecamatan alam barajo kota jambi, KOTA JAMBI, KOTA BARU, JAMBI, ID, 36129</p>
+            <p className='text-white'>RT 11 Perumahan Valencia, Desa Mendalo Indah, Kecamatan Jambi Luar Kota, Kabupaten Muaro Jambi</p>
           </div>
         </div>
         <div className='ms-20 text-white flex flex-col items-center justify-center'>

@@ -18,6 +18,7 @@ import ListSurat from '../ListSurat';
 import ListPenduduk from '../JumlahPenduduk/ListPenduduk';
 import Add from '../JumlahPenduduk/Add';
 import DataPendudukUser from '../DataPendudukUser';
+import Edit from '../JumlahPenduduk/Edit';
 
 const App = () => {
   const auth = getAuth()
@@ -79,6 +80,7 @@ const App = () => {
               <Route path="datapenduduk" element={<DataPenduduk />}>
                 <Route path="listpenduduk" element={<ListPenduduk />} />
                 <Route path="add" element={<Add />} />
+                <Route path=":id" element={<Edit />} />
               </Route>
           </Route>
         </Routes>

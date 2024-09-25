@@ -35,7 +35,7 @@ const Navbar = ({ user }) => {
         <div className="container flex justify-between items-center">
           <div className='text-2xl font-bold flex items-center gap-2'>
             <img src={imgTangan} className='img-logo' alt='...'></img>
-            <p className='text-white cursor-pointer' onClick={() => navigate('/')}>Website RT</p>
+            <p className='text-white cursor-pointer' onClick={() => navigate('/')}>SIMARATA</p>
           </div>
           <div className='hidden md:block'>
             <ul className='flex items-center gap-6 text-white'>

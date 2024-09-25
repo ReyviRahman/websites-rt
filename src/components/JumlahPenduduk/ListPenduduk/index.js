@@ -57,6 +57,7 @@ const ListPenduduk = () => {
                 <button 
                   type="button" 
                   className="bg-blue-500 text-white font-bold py-1 px-3 rounded-md hover:bg-blue-600"
+                  onClick={() => navigate(`/dashboardadmin/datapenduduk/${item.id}`)}
                 >
                   Edit
                 </button>

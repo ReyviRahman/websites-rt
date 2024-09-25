@@ -5,7 +5,6 @@ import { COLLECTION_BERKAS, db, storage } from '../../config/firestore';
 import Swal from 'sweetalert2';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Untuk Firebase Storage
 
-
 const DetailSurat = () => {
   const { id } = useParams();
   const docRef = doc(db, COLLECTION_BERKAS, id);
