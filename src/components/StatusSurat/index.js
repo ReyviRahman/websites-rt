@@ -13,7 +13,9 @@ const StatusSurat = () => {
   const fetchData = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, COLLECTION_BERKAS));
-      const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const items = querySnapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => new Date(a.tanggalPengajuan) - new Date(b.tanggalPengajuan));
       setData(items);
     } catch (error) {
       console.error('Error fetching data: ', error);
