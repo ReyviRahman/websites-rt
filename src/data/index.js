@@ -11,8 +11,8 @@ const NavbarMenu = [
   },
   {
     id:3,
-    title: 'Keuangan',
-    link: '#'
+    title: 'Tentang Kami',
+    link: '/tentangkami'
   },
 ]
 
@@ -29,8 +29,8 @@ const NavbarMenuAdmin = [
   },
   {
     id:3,
-    title: 'Keuangan',
-    link: '#'
+    title: 'Tentang Kami',
+    link: '/tentangkami'
   },
   {
     id:4,

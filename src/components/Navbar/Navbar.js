@@ -1,7 +1,7 @@
 import { NavbarMenu, NavbarMenuAdmin } from '../../data'
 import { MdMenu } from "react-icons/md"
 import imgLogo from '../../assets/images/logo-website.jpeg'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ResponsiveMenu from './ResponsiveMenu'
 import { useNavigate } from 'react-router-dom'
 import { signOut, getAuth } from 'firebase/auth'
@@ -19,15 +19,18 @@ const Navbar = ({ user }) => {
       .catch((error) => console.log(error))
   }
   const [index, setIndex] = useState(0);
-  const [indexAdmin, setIndexAdmin] = useState(3);
-
   const handleClick = (i) => {
     setIndex(i === index ? null : i); 
   };
-
-  const handleClickAdmin = (i) => {
-    setIndexAdmin(i === indexAdmin ? null : i); 
-  };
+  
+  useEffect(() => {
+    if (user) {
+      setIndex(3); // Jika user ada, set index menjadi 3
+      navigate('/dashboardadmin/admin')
+    } else {
+      setIndex(0); // Jika user null, set index menjadi 0
+    }
+  }, [user]);
 
   return (
     <>
@@ -46,9 +49,11 @@ const Navbar = ({ user }) => {
                     return (
                       <li key={i}>
                         <a onClick={() => {
-                          handleClickAdmin(i)
+                          if (index !== i) {
+                            handleClick(i)
+                          }
                           navigate(item.link)
-                          }} className={`${indexAdmin === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3 font-semibold`}>{item.title}</a>
+                          }} className={`${index === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3 font-semibold`}>{item.title}</a>
                       </li>
                     )
                   })
@@ -61,7 +66,9 @@ const Navbar = ({ user }) => {
                     return (
                       <li key={i}>
                         <a onClick={() => {
-                          handleClick(i)
+                          if (index !== i) {
+                            handleClick(i)
+                          }
                           navigate(item.link)
                           }} className={`${index === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3  font-semibold`}>{item.title}</a>
                       </li>
@@ -73,12 +80,11 @@ const Navbar = ({ user }) => {
             )}
             <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-bold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary">
+        <MenuButton className={`${index === 4 ? 'bg-secondary' : 'hover:text-white'} ${index === 5 ? 'bg-secondary' : 'hover:text-white'} inline-flex w-full justify-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-bold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary`}>
           Layanan
           <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-white" />
         </MenuButton>
       </div>
-
       <MenuItems
         transition
         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
@@ -86,7 +92,15 @@ const Navbar = ({ user }) => {
         <div className="py-1">
           <MenuItem>
             <a
-              onClick={() => {navigate('/suratpengantar')}}
+              onClick={() => {
+                navigate('/suratpengantar')
+                console.log(index)
+                if (index !== 5 && user != null) {
+                  setIndex(5)
+                } else if (index !== 4) {
+                  setIndex(4)
+                }
+              }}
               className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
             >
               Surat Pengantar
@@ -94,7 +108,14 @@ const Navbar = ({ user }) => {
           </MenuItem>
           <MenuItem>
             <a
-              onClick={() => {navigate('/statussurat')}}
+              onClick={() => {
+                navigate('/statussurat')
+                if (index !== 5 && user != null) {
+                  setIndex(5)
+                } else if (index !== 4) {
+                  setIndex(4)
+                }
+              }}
               className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
             >
               Cek Status Surat

@@ -19,6 +19,7 @@ import ListPenduduk from '../JumlahPenduduk/ListPenduduk';
 import Add from '../JumlahPenduduk/Add';
 import DataPendudukUser from '../DataPendudukUser';
 import Edit from '../JumlahPenduduk/Edit';
+import TentangKami from '../TentangKami';
 
 const App = () => {
   const auth = getAuth()
@@ -61,6 +62,7 @@ const App = () => {
         )}
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/tentangkami" element={<TentangKami />} />
           <Route path="/login" element={<Login />} />
           <Route path="/suratpengantar" element={<SuratPengantar />} />
           <Route path="/datapenduduk" element={<DataPendudukUser />} />

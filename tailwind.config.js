@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       colors: {
         primary: '#161D6F',
-        secondary: '#00CCDD'
+        secondary: '#00CCDD',
+        orange: '#FEB811'
       },
       container: {
         padding: {
@@ -18,6 +19,8 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 }
 
