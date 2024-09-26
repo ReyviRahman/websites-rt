@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import { db, COLLECTION_PENDUDUK } from '../../../config/firestore'; 
+import Swal from 'sweetalert2';
 
 const ListPenduduk = () => {
   const [data, setData] = useState([]);
@@ -21,6 +22,37 @@ const ListPenduduk = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Hapus Data?',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+    }).then(async result => {
+      Swal.fire({
+        title: 'Loading',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading(); 
+        }
+      });
+
+      if (result.value) {
+        await deleteDoc(doc(db, COLLECTION_PENDUDUK, id));
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Data Berhasil DiHapus!',
+          showConfirmButton: false,
+        });
+
+        const dataCopy = data.filter(dataa => dataa.id !== id);
+        setData(dataCopy);
+      }
+    });
+  };
 
   return (
     <div className="bg-white">
@@ -66,6 +98,7 @@ const ListPenduduk = () => {
                 <button 
                   type="button" 
                   className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600"
+                  onClick={() => handleDelete(item.id)}
                 >
                   Hapus
                 </button>
