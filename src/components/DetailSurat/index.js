@@ -82,6 +82,15 @@ const DetailSurat = () => {
 
   const fetchSurat = async () => {
     try {
+      Swal.fire({
+        title: 'Loading...',
+        text: 'Mohon Tunggu',
+        allowOutsideClick: false, // Prevent closing by clicking outside
+        didOpen: () => {
+          Swal.showLoading(); // Show loading spinner
+        }
+      });
+
       const suratSnapshot = await getDoc(docRef);
       if (suratSnapshot.exists()) {
         console.log("Document data:", suratSnapshot.data());
@@ -89,8 +98,14 @@ const DetailSurat = () => {
       } else {
         console.log("No such document!");
       }
+      Swal.close();
     } catch (error) {
       console.error("Error fetching document:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to fetch the document!'
+      });
     }
   };
 

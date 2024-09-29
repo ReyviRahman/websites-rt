@@ -4,6 +4,7 @@ import imgControl from '../../assets/images/control.png'
 import imgAdmin from '../../assets/images/shield_person.png'
 import iconProsesSurat from '../../assets/images/icon-proses-surat.png'
 import iconJmlPenduduk from '../../assets/images/icon-jml-penduduk-white.png'
+import iconBerita from '../../assets/images/icon-berita.png'
 import { Outlet, useNavigate } from 'react-router-dom';
 
 const DashboardAdmin = () => {
@@ -13,7 +14,8 @@ const DashboardAdmin = () => {
 
   const Menus = [
     { icon:iconProsesSurat ,  title: "Proses Surat",  link: "/dashboardadmin/prosessurat/listsurat" },
-    { icon:iconJmlPenduduk ,  title: "Data Penduduk",  link: "/dashboardadmin/datapenduduk/listpenduduk" },
+    { icon:iconJmlPenduduk ,  title: "Data Warga",  link: "/dashboardadmin/datapenduduk/listpenduduk" },
+    { icon:iconBerita ,  title: "Berita Dan Pengumuman",  link: "/dashboardadmin/beritadanpengumuman/listberita" },
   ];
 
   const handleClick = (i) => {
@@ -46,7 +48,7 @@ const DashboardAdmin = () => {
             }`}
           />
           <h1
-            className={`cursor-pointer text-white origin-left font-medium text-xl duration-200 ${
+            className={`cursor-pointer text-white origin-left font-medium text-lg duration-200 ${
               !open && "scale-0"
             }`}
             onClick={() => {

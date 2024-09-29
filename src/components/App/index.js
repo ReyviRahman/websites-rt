@@ -17,24 +17,38 @@ import DetailSurat from '../DetailSurat';
 import ListSurat from '../ListSurat';
 import ListPenduduk from '../JumlahPenduduk/ListPenduduk';
 import Add from '../JumlahPenduduk/Add';
+import AddBerita from '../BeritaDanPengumuman/Add';
 import DataPendudukUser from '../DataPendudukUser';
 import Edit from '../JumlahPenduduk/Edit';
 import TentangKami from '../TentangKami';
+import ListBerita from '../BeritaDanPengumuman/ListBerita';
+import BeritaDanPengumuman from '../BeritaDanPengumuman';
+import Register from '../Register';
 
 const App = () => {
   const auth = getAuth()
   const [user, setUser] = useState(null)
   const [isFetching, setIsFetching] = useState(true)
+  const [role, setRole] = useState("")
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user)
+        console.log(`ini email user: ${user.email}`)
         setIsFetching(false)
+        if (user.email == "adminrt@gmail.com") {
+          setRole("Admin")
+        } else if (user.email == "bendaharart@gmail.com") {
+          setRole("Bendahara")
+        } else {
+          setRole("User")
+        }
         return
       }
       setIsFetching(false)
       setUser(null)
+      setRole("Guest")
     })
     return () => unsubscribe()
   }, [])
@@ -55,19 +69,17 @@ const App = () => {
   return (
     <div>
       <Router>
-        {user ? (
-          <Navbar user={user}/>
-        ) : (
-          <Navbar user={null}/>
-        )}
+        <Navbar user={user} role={role}/>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/tentangkami" element={<TentangKami />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/suratpengantar" element={<SuratPengantar />} />
           <Route path="/datapenduduk" element={<DataPendudukUser />} />
           <Route path="/statussurat" element={<StatusSurat />} />
-          <Route
+          { role == "Admin" && (
+            <Route
             path='/dashboardadmin'
             element={
               <ProtectedRoute user={user}>
@@ -84,7 +96,15 @@ const App = () => {
                 <Route path="add" element={<Add />} />
                 <Route path=":id" element={<Edit />} />
               </Route>
-          </Route>
+
+              <Route path="beritadanpengumuman" element={<BeritaDanPengumuman />}>
+                <Route path="listberita" element={<ListBerita />} />
+                <Route path="add" element={<AddBerita />} />
+                <Route path=":id" element={<Edit />} />
+              </Route>
+            </Route>
+          )}
+
         </Routes>
       </Router>
 

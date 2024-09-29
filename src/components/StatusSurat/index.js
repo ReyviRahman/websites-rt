@@ -1,26 +1,62 @@
-// StatusSurat.js
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db, COLLECTION_BERKAS } from '../../config/firestore'; // Path to your Firebase config file
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db, COLLECTION_BERKAS } from '../../config/firestore'; 
 import imgTangan from '../../assets/images/img-tangan.png'
 import iconIg from '../../assets/images/icon-ig.png'
 import iconFb from '../../assets/images/icon-fb.png'
-
+import Swal from 'sweetalert2';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const StatusSurat = () => {
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
+    // Menampilkan Swal loading
+    Swal.fire({
+      title: 'Loading',
+      text: 'Mohon tunggu...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // Menampilkan indikator loading
+      }
+    });
+  
     try {
-      const querySnapshot = await getDocs(collection(db, COLLECTION_BERKAS));
-      const items = querySnapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .sort((a, b) => new Date(a.tanggalPengajuan) - new Date(b.tanggalPengajuan));
-      setData(items);
+      const auth = getAuth();
+  
+      // Menggunakan onAuthStateChanged untuk cek user
+      onAuthStateChanged(auth, async (user) => { // Mengubah menjadi async
+        if (user) {
+          const uid = user.uid;
+  
+          // Query untuk mengambil data dengan userUid yang sama dengan user.uid
+          const q = query(collection(db, COLLECTION_BERKAS), where("userUid", "==", uid));
+  
+          // Mendapatkan dokumen yang cocok
+          const querySnapshot = await getDocs(q);
+          const items = querySnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .sort((a, b) => new Date(a.tanggalPengajuan) - new Date(b.tanggalPengajuan));
+  
+          // Menyimpan data ke state
+          setData(items);
+  
+          // Menutup Swal setelah data berhasil diambil
+          Swal.close();
+        }
+      });
+  
     } catch (error) {
       console.error('Error fetching data: ', error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Terjadi kesalahan saat mengambil data.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     }
   };
+  
 
   useEffect(() => {
     fetchData();

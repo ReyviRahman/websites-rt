@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { db, COLLECTION_BERKAS } from '../../config/firestore'; 
+import Swal from 'sweetalert2';
 
 const ListSurat = () => {
   const [data, setData] = useState([]);
@@ -9,14 +10,29 @@ const ListSurat = () => {
 
   const fetchData = async () => {
     try {
+      Swal.fire({
+        title: 'Loading...',
+        text: 'Mohon Tunggu',
+        allowOutsideClick: false, // Prevent closing by clicking outside
+        didOpen: () => {
+          Swal.showLoading(); // Show loading spinner
+        }
+      });
+
       const querySnapshot = await getDocs(collection(db, COLLECTION_BERKAS));
       const items = querySnapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .sort((a, b) => new Date(a.tanggalPengajuan) - new Date(b.tanggalPengajuan));
       setData(items);
       console.log(data)
+      Swal.close()
     } catch (error) {
       console.error('Error fetching data: ', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to fetch the document!'
+      });
     }
   };
 

@@ -9,13 +9,16 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import imgTangan from '../../assets/images/img-tangan.png'
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, role }) => {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const auth = getAuth()
   const handleSignOut = () => {
     signOut(auth)
-      .then(() => console.log("Sign Out"))
+      .then(() => {
+        console.log("Sign Out")
+        navigate('/')
+      })
       .catch((error) => console.log(error))
   }
   const [index, setIndex] = useState(0);
@@ -24,25 +27,25 @@ const Navbar = ({ user }) => {
   };
   
   useEffect(() => {
-    if (user) {
-      setIndex(3); // Jika user ada, set index menjadi 3
+    if (role == "Admin") {
+      setIndex(4); // Jika role ada, set index menjadi 3
       navigate('/dashboardadmin/admin')
     } else {
-      setIndex(0); // Jika user null, set index menjadi 0
+      setIndex(0); // Jika role null, set index menjadi 0
     }
-  }, [user]);
+  }, [role]);
 
   return (
     <>
       <nav className='bg-primary navbar'>
-        <div className="container flex justify-between items-center">
+        <div className="px-2 flex justify-between items-center">
           <div className='text-2xl font-bold flex items-center gap-2'>
             <img src={imgTangan} className='img-logo' alt='...'></img>
             <p className='text-white cursor-pointer' onClick={() => navigate('/')}>SIMARATA</p>
           </div>
           <div className='hidden md:block'>
             <ul className='flex items-center gap-6 text-white'>
-            {user ? (
+            {role == "Admin" ? (
               <>
                 {
                   NavbarMenuAdmin.map((item, i) => {
@@ -79,51 +82,55 @@ const Navbar = ({ user }) => {
               
             )}
             <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <MenuButton className={`${index === 4 ? 'bg-secondary' : 'hover:text-white'} ${index === 5 ? 'bg-secondary' : 'hover:text-white'} inline-flex w-full justify-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-bold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary`}>
-          Layanan
-          <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-white" />
-        </MenuButton>
-      </div>
-      <MenuItems
-        transition
-        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-      >
-        <div className="py-1">
-          <MenuItem>
-            <a
-              onClick={() => {
-                navigate('/suratpengantar')
-                console.log(index)
-                if (index !== 5 && user != null) {
-                  setIndex(5)
-                } else if (index !== 4) {
-                  setIndex(4)
-                }
-              }}
-              className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
-            >
-              Surat Pengantar
-            </a>
-          </MenuItem>
-          <MenuItem>
-            <a
-              onClick={() => {
-                navigate('/statussurat')
-                if (index !== 5 && user != null) {
-                  setIndex(5)
-                } else if (index !== 4) {
-                  setIndex(4)
-                }
-              }}
-              className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
-            >
-              Cek Status Surat
-            </a>
-          </MenuItem>
-        </div>
-      </MenuItems>
-    </Menu>
+              { role == "User" && (
+                <>
+                  <div>
+                    <MenuButton className={`${index === 5 ? 'bg-secondary' : 'hover:text-white'} ${index === 5 ? 'bg-secondary' : 'hover:text-white'} inline-flex w-full justify-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-bold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-secondary`}>
+                      Layanan
+                      <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-white" />
+                    </MenuButton>
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    >
+                      <div className="py-1">
+                        <MenuItem>
+                          <a
+                            onClick={() => {
+                              navigate('/suratpengantar')
+                              console.log(index)
+                              if (index !== 5 && user != null) {
+                                setIndex(5)
+                              } else if (index !== 4) {
+                                setIndex(4)
+                              }
+                            }}
+                            className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
+                          >
+                            Surat Pengantar
+                          </a>
+                        </MenuItem>
+                        <MenuItem>
+                          <a
+                            onClick={() => {
+                              navigate('/statussurat')
+                              if (index !== 5 && user != null) {
+                                setIndex(5)
+                              } else if (index !== 4) {
+                                setIndex(4)
+                              }
+                            }}
+                            className="cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-primary data-[focus]:text-white"
+                          >
+                            Cek Status Surat
+                          </a>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </div>
+                </>
+              )}
+            </Menu>
             </ul>
           </div>
           {user ? (
@@ -133,6 +140,7 @@ const Navbar = ({ user }) => {
           ): (
             <div className='flex items-center'>
               <button onClick={() => navigate('/login')} className='hover:bg-secondary text-secondary font-semibold hover:text-white rounded-md border border-secondary px-6 py-2 duration-200 hidden md:block'>Login</button>
+              <button onClick={() => navigate('/register')} className='hover:bg-secondary text-secondary font-semibold hover:text-white rounded-md border border-secondary px-6 py-2 duration-200 hidden md:block ms-2'>Register</button>
             </div>
           )}
           
