@@ -10,6 +10,8 @@ import { format } from "date-fns";
 const Keuangan = () => {
   const [data, setData] = useState([]);
   const [totalSaldo, setTotalSaldo] = useState(0);
+  const [pemasukan, setPemasukan] = useState(0);
+  const [pengeluaran, setPengeluaran] = useState(0);
 
   const fetchData = async () => {
     Swal.fire({
@@ -40,6 +42,8 @@ const Keuangan = () => {
         }
       });
 
+      setPemasukan(totalPemasukan);
+      setPengeluaran(totalPengeluaran);
       setTotalSaldo(totalPemasukan - totalPengeluaran);
       console.log("Total Pemasukan: ", totalPemasukan);
       console.log("Total Pengeluaran: ", totalPengeluaran);
@@ -82,6 +86,14 @@ const Keuangan = () => {
               <td className="px-6 py-4 text-sm text-gray-500">{item.jumlah}</td>
             </tr>
           ))}
+          <tr>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-primary" colSpan={4}>Total Pemasukan</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-primary font-semibold">{pemasukan}</td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-primary" colSpan={4}>Total Pengeluaran</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-primary font-semibold">{pengeluaran}</td>
+          </tr>
           <tr>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-primary" colSpan={4}>Total Saldo RT</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-primary font-semibold">{totalSaldo}</td>
