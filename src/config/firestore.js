@@ -23,6 +23,10 @@ const storage = getStorage(app);
 const COLLECTION_BERKAS = "berkas";
 const COLLECTION_PENDUDUK = "penduduk";
 const COLLECTION_USER = "user";
+const COLLECTION_DELETE = "delete";
+const COLLECTION_BERITA = "berita";
+const COLLECTION_PENGUMUMAN = "pengumuman";
+const COLLECTION_KEUANGAN = "keuangan";
 // Initialize Cloud Firestore and get a reference to the service
-export { db, storage, COLLECTION_BERKAS, COLLECTION_PENDUDUK , COLLECTION_USER};
+export { db, storage, COLLECTION_BERKAS, COLLECTION_PENDUDUK , COLLECTION_USER, COLLECTION_DELETE, COLLECTION_BERITA, COLLECTION_PENGUMUMAN, COLLECTION_KEUANGAN};
 

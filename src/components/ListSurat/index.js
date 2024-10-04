@@ -74,7 +74,7 @@ const ListSurat = () => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keperluanSurat}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.ktpUrl}`} className="text-blue-500 underline hover:text-blue-700">KTP.Pdf</a></td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.kkUrl}`} className="text-blue-500 underline hover:text-blue-700">KK.Pdf</a></td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-white flex justify-center">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-white flex justify-center items-center">
                 <h1 
                   className={`cursor-pointer rounded px-2 py-1 ${item.statusSurat === 'DiTerima' ? 'bg-green-500' : item.statusSurat === 'DiTolak' ? 'bg-red-500' : 'bg-primary'}`}
                   onClick={() => navigate(`/dashboardadmin/prosessurat/${item.id}`)}
@@ -85,7 +85,7 @@ const ListSurat = () => {
               {item.statusSurat === 'DiTerima' ? (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.suratBalasan}`} className="text-blue-500 underline hover:text-blue-700">Download Surat Balasan</a></td>
               ) : item.statusSurat === 'DiTolak' ? (
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.alasanPenolakan}</td>
+                <td className="px-6 py-4 text-sm text-gray-500">{item.alasanPenolakan}</td>
               ) : (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Sedang DiProses</td>
               )}

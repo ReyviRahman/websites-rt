@@ -4,10 +4,12 @@ import imgSelamatDatang from '../../assets/images/img-selamat-datang-admin.png'
 import imgSurat from '../../assets/images/icon-surat.png'
 import imgJmlPenduduk from '../../assets/images/icon-jml-penduduk-white.png'
 import { collection, getDocs } from 'firebase/firestore';
-import { db, COLLECTION_BERKAS } from '../../config/firestore';
+import { db, COLLECTION_BERKAS, COLLECTION_DELETE, COLLECTION_USER } from '../../config/firestore';
 
 const Admin = () => {
   const [jmlDataBerkas, setJmlDataBerkas] = useState(0);
+  const [jmlDataDelete, setJmlDataDelete] = useState(0);
+  const [jmlDataUser, setJmlDataUser] = useState(0);
   useEffect(() => {
     // Fungsi untuk mengambil data dari Firestore
     const fetchData = async () => {
@@ -15,11 +17,37 @@ const Admin = () => {
         // Mengambil semua dokumen dari koleksi
         const querySnapshot = await getDocs(collection(db, COLLECTION_BERKAS));
         setJmlDataBerkas(querySnapshot.size); // Menghitung jumlah dokumen
+        
       } catch (error) {
         console.error('Error fetching data from Firestore:', error);
       }
     };
 
+    const fetchDataDelete = async () => {
+      try {
+        // Mengambil semua dokumen dari koleksi
+        const querySnapshot = await getDocs(collection(db, COLLECTION_DELETE));
+        setJmlDataDelete(querySnapshot.size); // Menghitung jumlah dokumen
+        
+      } catch (error) {
+        console.error('Error fetching data from Firestore:', error);
+      }
+    };
+
+    const fetchDataUser = async () => {
+      try {
+        // Mengambil semua dokumen dari koleksi
+        const querySnapshot = await getDocs(collection(db, COLLECTION_USER));
+        setJmlDataUser(querySnapshot.size); // Menghitung jumlah dokumen
+        console.log(querySnapshot.size)
+        
+      } catch (error) {
+        console.error('Error fetching data from Firestore:', error);
+      }
+    };
+
+    fetchDataDelete();
+    fetchDataUser();
     fetchData();
   }, []);
 
@@ -66,7 +94,7 @@ const Admin = () => {
             <div className='flex justify-between'>
               <div>
                 <h1 className='text-white font-semibold'>Jumlah Penduduk</h1>
-                <h1 className='text-white font-bold'>0</h1>
+                <h1 className='text-white font-bold'>{jmlDataUser - jmlDataDelete}</h1>
               </div>
               <div>
                 <img src={imgJmlPenduduk} width={50} alt=''/>

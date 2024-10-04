@@ -24,6 +24,16 @@ import TentangKami from '../TentangKami';
 import ListBerita from '../BeritaDanPengumuman/ListBerita';
 import BeritaDanPengumuman from '../BeritaDanPengumuman';
 import Register from '../Register';
+import EditBerita from '../BeritaDanPengumuman/EditBerita';
+import EditPengumuman from '../BeritaDanPengumuman/EditPengumuman';
+import DetailBerita from '../DetailBerita'
+import DashboardBendahara from '../DashboardBendahara';
+import Bendahara from '../DashboardBendahara/Bendahara';
+import Keuangan from '../DashboardBendahara/keuangan';
+import ListKeuangan from '../DashboardBendahara/keuangan/listkeuangan';
+import AddKeuangan from '../DashboardBendahara/keuangan/addkeuangan/AddKeuangan';
+import EditKeuangan from '../DashboardBendahara/keuangan/editkeuangan';
+import KeuanganWarga from '../Keuangan'
 
 const App = () => {
   const auth = getAuth()
@@ -72,12 +82,30 @@ const App = () => {
         <Navbar user={user} role={role}/>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/detailberita/:id" element={<DetailBerita />} />
           <Route path="/tentangkami" element={<TentangKami />} />
+          <Route path="/keuangan" element={<KeuanganWarga />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/suratpengantar" element={<SuratPengantar />} />
           <Route path="/datapenduduk" element={<DataPendudukUser />} />
           <Route path="/statussurat" element={<StatusSurat />} />
+          {role == "Bendahara" && (
+            <Route
+            path='/dashboardbendahara'
+            element={
+              <ProtectedRoute user={user}>
+                <DashboardBendahara></DashboardBendahara>
+              </ProtectedRoute>
+            }>
+              <Route path="bendahara" element={<Bendahara />} />
+              <Route path="keuangan" element={<Keuangan />}>
+                <Route path="listkeuangan" element={<ListKeuangan />} />
+                <Route path="add" element={<AddKeuangan />} />
+                <Route path=":id" element={<EditKeuangan />} />
+              </Route>
+            </Route>
+          )}
           { role == "Admin" && (
             <Route
             path='/dashboardadmin'
@@ -100,7 +128,8 @@ const App = () => {
               <Route path="beritadanpengumuman" element={<BeritaDanPengumuman />}>
                 <Route path="listberita" element={<ListBerita />} />
                 <Route path="add" element={<AddBerita />} />
-                <Route path=":id" element={<Edit />} />
+                <Route path=":id" element={<EditBerita />} />
+                <Route path="pengumuman/:id" element={<EditPengumuman />} />
               </Route>
             </Route>
           )}

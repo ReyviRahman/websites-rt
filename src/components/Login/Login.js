@@ -3,7 +3,8 @@ import Swal from 'sweetalert2';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom'
 import imgTangan from '../../assets/images/img-tangan.png'
-
+import { COLLECTION_DELETE, db } from '../../config/firestore';
+import { getDocs, collection } from 'firebase/firestore';
 const Login = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState('');
@@ -22,28 +23,40 @@ const Login = () => {
           Swal.showLoading(); // Memunculkan loading spinner
         }
       });
-      await signInWithEmailAndPassword(auth, email, password)
-      Swal.close()
-      if (email == "adminrt@gmail.com") {
-        navigate('/dashboardadmin/admin')
+      const querySnapshot = await getDocs(collection(db, COLLECTION_DELETE));
+      
+      let ada = false; // Inisialisasi variabel login menjadi false
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.email === email) {
+          ada = true; 
+        }
+      });
+
+      if (ada == false) {
+        await signInWithEmailAndPassword(auth, email, password)
+        Swal.close()
+        if (email == "adminrt@gmail.com") {
+          navigate('/dashboardadmin/admin')
+        } else {
+          navigate('/')
+        }
       } else {
-        navigate('/')
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Akun Telah dihapus',
+          showConfirmButton: true,
+        });
       }
+      
     } catch (error) {
       Swal.fire({
-        timer: 1500,
-        showConfirmButton: false,
-        willOpen: () => {
-          Swal.showLoading();
-        },
-        willClose: () => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Incorrect email or password.',
-            showConfirmButton: true,
-          });
-        },
+        icon: 'error',
+        title: 'email atau password salah',
+        text: error.message,
+        showConfirmButton: true,
       });
     }
       

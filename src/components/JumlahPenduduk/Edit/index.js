@@ -2,19 +2,23 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Untuk Firebase Storage
-import { db, storage, COLLECTION_PENDUDUK } from '../../../config/firestore'
+import { db, storage, COLLECTION_USER } from '../../../config/firestore'
 import { collection, addDoc, setDoc, doc, getDoc, updateDoc} from "firebase/firestore"; 
 
 const Edit = () => {
   const { id } = useParams();
-  const [penduduk, setPenduduk] = useState({});
-  const docRef = doc(db, COLLECTION_PENDUDUK, id);
+  const docRef = doc(db, COLLECTION_USER, id);
   const [nama, setNama] = useState('')
-  const [jabatan, setJabatan] = useState('')
   const [urlFoto, setUrlFoto] = useState('')
   const [fileFoto, setFileFoto] = useState(null)
-  const [keterangan, setKeterangan] = useState('')
   const navigate = useNavigate()
+  const [nik, setNik] = useState('');
+  const [ttl, setTtl] = useState('');
+  const [jk, setJk] = useState('Laki-Laki');
+  const [alamat, setAlamat] = useState('');
+  const [agama, setAgama] = useState('');
+  const [status, setStatus] = useState('Sudah Kawin');
+  const [pekerjaan, setPekerjaan] = useState('');
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -28,7 +32,7 @@ const Edit = () => {
       }
     });
     try {
-      const pendudukRef = doc(db, COLLECTION_PENDUDUK, id);
+      const pendudukRef = doc(db, COLLECTION_USER, id);
 
       const uploadFile = async (file, folder) => {
         const storageRef = ref(storage, `${folder}/${file.name}`);
@@ -41,10 +45,15 @@ const Edit = () => {
       console.log(url)
 
       await updateDoc(pendudukRef, {
-        nama: nama,
-        jabatan: jabatan,
-        keteragan: keterangan,
-        fotoUrl: url
+        agama,
+        alamat,
+        fotoUrl: url,
+        jk,
+        nama,
+        nik,
+        pekerjaan,
+        status,
+        ttl
       })
 
       Swal.fire({
@@ -70,15 +79,28 @@ const Edit = () => {
   };
 
   const fetchPenduduk = async () => {
+    Swal.fire({
+      title: 'Loading...',
+      text: 'Mohon Tunggu',
+      allowOutsideClick: false, // Prevent closing by clicking outside
+      didOpen: () => {
+        Swal.showLoading(); // Show loading spinner
+      }
+    });
+
     try {
       const pendudukSnapshot = await getDoc(docRef);
       if (pendudukSnapshot.exists()) {
         console.log("Document data:", pendudukSnapshot.data());
-        setPenduduk(pendudukSnapshot.data());
         setNama(pendudukSnapshot.data().nama)
-        setJabatan(pendudukSnapshot.data().jabatan)
         setUrlFoto(pendudukSnapshot.data().fotoUrl)
-        setKeterangan(pendudukSnapshot.data().keterangan)
+        setNik(pendudukSnapshot.data().nik)
+        setTtl(pendudukSnapshot.data().ttl)
+        setAlamat(pendudukSnapshot.data().alamat)
+        setAgama(pendudukSnapshot.data().agama)
+        setStatus(pendudukSnapshot.data().agama)
+        setPekerjaan(pendudukSnapshot.data().pekerjaan)
+        Swal.close()
       } else {
         console.log("No such document!");
       }
@@ -97,6 +119,19 @@ const Edit = () => {
     <div className='flex justify-center'>
       <form onSubmit={handleUpload} className='mb-10 border border-primary rounded px-6 py-2 form-w' >
         <h1 className='text-xl font-semibold mb-2 text-center'>{`Edit Data ${nama}`}</h1>
+        <label for="nik" class="block mb-3">
+          <span class="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            NIK
+          </span>
+          <input class="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
+          id="nik"
+          type="text"
+          name="nik"
+          placeholder="Masukkan NIK"
+          value={nik}
+          onChange={e => setNik(e.target.value)} />
+        </label>
+
         <label htmlFor="nama" className="block mb-3">
           <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
             Nama Lengkap
@@ -110,22 +145,91 @@ const Edit = () => {
           onChange={e => setNama(e.target.value)} />
         </label>
 
-        <label htmlFor="jabatan" className="block mb-3">
+        <label htmlFor="ttl" className="block mb-3">
           <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Jabatan
+            Tempat, Tanggal Lahir
           </span>
           <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="jabatan"
+          id="ttl"
           type="text"
-          name="jabatan"
-          placeholder="Warga Sipil"
-          value={jabatan}
-          onChange={e => setJabatan(e.target.value)} />
+          name="ttl"
+          placeholder="Masukkan Tempat Tanggal Lahir"
+          value={ttl}
+          onChange={e => setTtl(e.target.value)} />
+        </label>
+
+        <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+          Jenis Kelamin
+        </span>
+        <select
+          className="mt-1 mb-3 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+          id="jk"
+          name="jk"
+          value={jk}
+          onChange={e => setJk(e.target.value)}
+        >
+          <option value="Laki-Laki">Laki-Laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+
+        <label htmlFor="alamat" className="block mb-3">
+          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            Alamat Lengkap
+          </span>
+          <textarea rows={4} className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
+          id="alamat"
+          type="alamat"
+          name="alamat"
+          placeholder="Masukkan Alamat Lengkap"
+          value={alamat}
+          onChange={e => setAlamat(e.target.value)} />
+        </label>
+
+        <label htmlFor="agama" className="block mb-3">
+          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            Agama
+          </span>
+          <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
+          id="agama"
+          type="text"
+          name="agama"
+          placeholder="Masukkan Agama"
+          value={agama}
+          onChange={e => setAgama(e.target.value)} />
+        </label>
+
+        <label htmlFor="status" className="block mb-3">
+          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            Status Perkawinan
+          </span>
+          <select
+          className="mt-1 mb-3 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+          id="status"
+          name="status"
+          value={status}
+          onChange={e => setStatus(e.target.value)}
+        >
+          <option value="Sudah Kawin">Sudah Kawin</option>
+          <option value="Belum Kawin">Belum Kawin</option>
+        </select>
+        </label>
+
+        <label htmlFor="pekerjaan" className="block mb-3">
+          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            Pekerjaan
+          </span>
+          <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
+          id="pekerjaan"
+          type="text"
+          name="pekerjaan"
+          placeholder="Masukkan Pekerjaan"
+          value={pekerjaan}
+          onChange={e => setPekerjaan(e.target.value)} />
         </label>
 
         <label htmlFor="fileFoto" className="block mb-3">
           <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Upload Foto
+            Ganti Foto
           </span>
           <input
             className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
@@ -134,19 +238,6 @@ const Edit = () => {
             name="fileFoto"
             onChange={(e) => setFileFoto(e.target.files[0])} // Mengambil file yang dipilih
           />
-        </label>
-
-        <label htmlFor="keterangan" className="block mb-3">
-          <span className="after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-            Keterangan
-          </span>
-          <input className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" 
-          id="keterangan"
-          type="text"
-          name="keterangan"
-          placeholder="Masih Hidup / Almarhum"
-          value={keterangan}
-          onChange={e => setKeterangan(e.target.value)} />
         </label>
 
         <button type="submit" className="mt-2 w-full bg-primary text-white font-bold p-2 rounded-md hover:bg-blue-600">

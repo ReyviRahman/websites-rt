@@ -1,4 +1,4 @@
-import { NavbarMenu, NavbarMenuAdmin } from '../../data'
+import { NavbarMenu, NavbarMenuAdmin, NavbarMenuBendahara } from '../../data'
 import { MdMenu } from "react-icons/md"
 import imgLogo from '../../assets/images/logo-website.jpeg'
 import React, { useState, useEffect } from 'react'
@@ -28,8 +28,11 @@ const Navbar = ({ user, role }) => {
   
   useEffect(() => {
     if (role == "Admin") {
-      setIndex(4); // Jika role ada, set index menjadi 3
+      setIndex(3); // Jika role ada, set index menjadi 3
       navigate('/dashboardadmin/admin')
+    } else if (role == "Bendahara"){
+      setIndex(3); // Jika role null, set index menjadi 0
+      navigate('/dashboardbendahara/bendahara')
     } else {
       setIndex(0); // Jika role null, set index menjadi 0
     }
@@ -45,41 +48,72 @@ const Navbar = ({ user, role }) => {
           </div>
           <div className='hidden md:block'>
             <ul className='flex items-center gap-6 text-white'>
-            {role == "Admin" ? (
-              <>
-                {
-                  NavbarMenuAdmin.map((item, i) => {
-                    return (
-                      <li key={i}>
-                        <a onClick={() => {
-                          if (index !== i) {
-                            handleClick(i)
-                          }
-                          navigate(item.link)
-                          }} className={`${index === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3 font-semibold`}>{item.title}</a>
-                      </li>
-                    )
-                  })
-                }
-              </>
+            {role === "Admin" ? (
+            <>
+              {NavbarMenuAdmin.map((item, i) => {
+                return (
+                  <li key={i}>
+                    <a
+                      onClick={() => {
+                        if (index !== i) {
+                          handleClick(i);
+                        }
+                        navigate(item.link);
+                      }}
+                      className={`${
+                        index === i ? "bg-secondary" : "hover:text-secondary"
+                      } rounded cursor-pointer inline-block py-1 px-3 font-semibold`}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </>
+            ) : role === "Bendahara" ? (
+            <>
+              {NavbarMenuBendahara.map((item, i) => {
+                return (
+                  <li key={i}>
+                    <a
+                      onClick={() => {
+                        if (index !== i) {
+                          handleClick(i);
+                        }
+                        navigate(item.link);
+                      }}
+                      className={`${
+                        index === i ? "bg-secondary" : "hover:text-secondary"
+                      } rounded cursor-pointer inline-block py-1 px-3 font-semibold`}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </>
             ) : (
-              <>
-                {
-                  NavbarMenu.map((item, i) => {
-                    return (
-                      <li key={i}>
-                        <a onClick={() => {
-                          if (index !== i) {
-                            handleClick(i)
-                          }
-                          navigate(item.link)
-                          }} className={`${index === i ? 'bg-secondary' : 'hover:text-secondary'} rounded cursor-pointer inline-block py-1 px-3  font-semibold`}>{item.title}</a>
-                      </li>
-                    )
-                  })
-                }
-              </>
-              
+            <>
+              {NavbarMenu.map((item, i) => {
+                return (
+                  <li key={i}>
+                    <a
+                      onClick={() => {
+                        if (index !== i) {
+                          handleClick(i);
+                        }
+                        navigate(item.link);
+                      }}
+                      className={`${
+                        index === i ? "bg-secondary" : "hover:text-secondary"
+                      } rounded cursor-pointer inline-block py-1 px-3 font-semibold`}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </>
             )}
             <Menu as="div" className="relative inline-block text-left">
               { role == "User" && (

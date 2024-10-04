@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
-import { COLLECTION_USER, db,  } from '../../../config/firestore'; 
+import { collection, getDocs, doc, deleteDoc, addDoc } from 'firebase/firestore';
+import { COLLECTION_USER, db, COLLECTION_DELETE} from '../../../config/firestore'; 
 import Swal from 'sweetalert2';
 
 const ListPenduduk = () => {
@@ -9,11 +9,20 @@ const ListPenduduk = () => {
   const navigate = useNavigate()
 
   const fetchData = async () => {
+    Swal.fire({
+      title: 'Loading...',
+      text: 'Mohon Tunggu',
+      allowOutsideClick: false, // Prevent closing by clicking outside
+      didOpen: () => {
+        Swal.showLoading(); // Show loading spinner
+      }
+    });
     try {
       const querySnapshot = await getDocs(collection(db, COLLECTION_USER));
       const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setData(items);
       console.log(data)
+      Swal.close()
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -23,36 +32,39 @@ const ListPenduduk = () => {
     fetchData();
   }, []);
 
-  // const handleDelete = (id) => {
-  //   Swal.fire({
-  //     icon: 'warning',
-  //     title: 'Hapus Data?',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Ya',
-  //     cancelButtonText: 'Tidak',
-  //   }).then(async result => {
-  //     Swal.fire({
-  //       title: 'Loading',
-  //       allowOutsideClick: false,
-  //       didOpen: () => {
-  //         Swal.showLoading(); 
-  //       }
-  //     });
+  const handleDelete = (id, email) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Hapus Data?',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+    }).then(async result => {
+      Swal.fire({
+        title: 'Loading',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading(); 
+        }
+      });
 
-  //     if (result.value) {
-  //       await deleteDoc(doc(db, COLLECTION_PENDUDUK, id));
+      if (result.value) {
+        await deleteDoc(doc(db, COLLECTION_USER, id));
+        await addDoc(collection(db, COLLECTION_DELETE), {
+          email
+        });
 
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Data Berhasil DiHapus!',
-  //         showConfirmButton: false,
-  //       });
+        Swal.fire({
+          icon: 'success',
+          title: 'Data Berhasil DiHapus!',
+          showConfirmButton: false,
+        });
 
-  //       const dataCopy = data.filter(dataa => dataa.id !== id);
-  //       setData(dataCopy);
-  //     }
-  //   });
-  // };
+        const dataCopy = data.filter(dataa => dataa.id !== id);
+        setData(dataCopy);
+      }
+    });
+  };
 
   return (
     <div className="bg-white">
@@ -76,8 +88,12 @@ const ListPenduduk = () => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Perkawinan</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit Data</th> */}
-            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hapus Data</th> */}
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider" colSpan={2}>
+              Aksi
+            </th>
+
+            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit Data</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hapus Data</th> */}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -92,11 +108,11 @@ const ListPenduduk = () => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.agama}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.status}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.pekerjaan}</td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <img src={item.fotoUrl} width={120} alt="" />
+              <td>
+                <img src={item.fotoUrl} width={220} alt="" />
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keterangan}</td>
-              {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.keterangan}</td> */}
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <button 
                   type="button" 
                   className="bg-blue-500 text-white font-bold py-1 px-3 rounded-md hover:bg-blue-600"
@@ -104,16 +120,16 @@ const ListPenduduk = () => {
                 >
                   Edit
                 </button>
-              </td> */}
-              {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <button 
                   type="button" 
                   className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600"
-                  onClick={() => handleDelete(item.id)}
+                  onClick={() => handleDelete(item.id, item.email)}
                 >
                   Hapus
                 </button>
-              </td> */}
+              </td>
             </tr>
           ))}
         </tbody>

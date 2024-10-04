@@ -92,7 +92,7 @@ const StatusSurat = () => {
                   {item.statusSurat === 'DiTerima' ? (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a target="_blank" href={`${item.suratBalasan}`} className="text-blue-500 underline hover:text-blue-700">Download Surat Balasan</a></td>
                   ) : item.statusSurat === 'DiTolak' ? (
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.alasanPenolakan}</td>
+                    <td className="px-6 py-4  text-sm text-gray-500">{item.alasanPenolakan}</td>
                   ) : (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Sedang DiProses</td>
                   )}

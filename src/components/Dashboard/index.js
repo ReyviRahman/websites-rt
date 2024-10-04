@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import imgBeritaSatu from '../../assets/images/berita-satu.png'
-import imgBeritaTiga from '../../assets/images/berita-tiga.jpg'
-import imgBeritaDua from '../../assets/images/berita-dua.jpg'
+import React, { useState, useEffect } from 'react';
 import imgTangan from '../../assets/images/img-tangan.png'
 import iconIg from '../../assets/images/icon-ig.png'
 import iconFb from '../../assets/images/icon-fb.png'
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import { COLLECTION_BERITA, COLLECTION_PENGUMUMAN, db} from '../../config/firestore'; 
+import { collection, getDocs, doc, deleteDoc, addDoc } from 'firebase/firestore';
+
 
 const Dashboard = () => {
+  const [data, setData] = useState([]);
+  const [dataPengumuman, setDataPengumuman] = useState([]);
+  const navigate = useNavigate()
 
   const Accordion = ({ title, content }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +33,36 @@ const Dashboard = () => {
     );
   };
 
+  const fetchData = async () => {
+    Swal.fire({
+      title: 'Loading...',
+      text: 'Mohon Tunggu',
+      allowOutsideClick: false, // Prevent closing by clicking outside
+      didOpen: () => {
+        Swal.showLoading(); // Show loading spinner
+      }
+    });
+
+    try {
+      const querySnapshot = await getDocs(collection(db, COLLECTION_BERITA));
+      const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setData(items);
+      console.log(data)
+
+      const querySnapshotPengumuman = await getDocs(collection(db, COLLECTION_PENGUMUMAN));
+      const itemsPengumuman = querySnapshotPengumuman.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setDataPengumuman(itemsPengumuman);
+      console.log(data)
+      Swal.close()
+    } catch (error) {
+      console.error('Error fetching data: ', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   return (
     <>
@@ -42,40 +77,32 @@ const Dashboard = () => {
           <h1 className='text-4xl font-bold'>Berita Terkini</h1>
           <hr className="mt-1 border-t-4 border-orange mb-5" />
           <div className='grid grid-cols-3 gap-y-3 gap-x-3'>
-            <img className='object-cover rounded-lg' src={imgBeritaSatu} alt='' style={{height: '180px', width:'300px'}}/>
-            <div className='col-span-2 flex flex-col justify-center'>
-              <h1 className='text-3xl font-bold text-primary line-clamp-2'>Tingkatkan Literasi Statistik Melalui RT Cantik BPS</h1>
-              <p className='line-clamp-4'>Valencia - Rabu 28 Agustus 2024 Badan Pusat Statistik (BPS) memberikan pembinaan tentang RT Cinta Statistik (RT Cantik) kepada RT Valencia, yang bertempat di Gedung Serba Guna RT Valencia, sekitar pukul jam 08.30 sampai denag jam 10.30 W…</p>
-            </div>
-
-            <img className='object-cover rounded-lg' src={imgBeritaDua} alt='' style={{height: '180px', width:'300px'}}/>
-            <div className='col-span-2 flex flex-col justify-center'>
-              <h1 className='text-3xl font-bold text-primary line-clamp-2'>Persiapan dan Perkenalan Program RT Cantik (RT Cinta Statistik)</h1>
-              <p className='line-clamp-4'>Hari ini Selasa 14 Mei 2024 RT Valencia kedatangan tamu dari Kepala BPS (Badan Pusat Statistik) beserta tim RT Cantik (6 orang), yaitu bertujuan untuk menindak lanjuti program dari BPS yang bernama Program RT Cantik. Ikut hadir pula pada kesempatan kali ini bapak Camat, bapak Kepala RT Valencia dan sebagian Perangkat RT. Sebelum acara tersebut dimulai bapak Kepala RT Valencia (Darsono) menyampaikan terima kasih kepada tim dari BPS yang telah mempercayai RT Valencia untuk menjalankan prgram tersebut. Dan juga menyampaikan terima kasihnya kepada bapak Camat Tambakromo yang telah menyempatkan waktu untuk mendampingi tim dari BPS.</p>
-            </div>
-            <img className='object-cover rounded-lg' src={imgBeritaTiga} alt='' style={{height: '180px', width:'300px'}}/>
-            <div className='col-span-2 flex flex-col justify-center'>
-              <h1 className='text-3xl font-bold text-primary line-clamp-2'>Monitoring dan Pendampingan Pemutaakhiran Data IDM 2024</h1>
-              <p className='line-clamp-4'>Demi percepatan Pemutaakhiran data IDM (Indek RT Membangun) Tahun 2024, hari ini Kamis tanggal 13 Juni 2024, RT Valencia Kecamatan Tambakromo di datangi tim dari Dinas Pemberdayaan Masyarakat dan RT </p>
-            </div>
-
+            {data.map((item, index) => (
+              <>
+                <img className='cursor-pointer object-cover rounded-lg' src={item.fotoUrl} alt='' style={{height: '180px', width:'300px'}}
+                onClick={() => navigate(`/detailberita/${item.id}`)}/>
+                <div className='col-span-2 flex flex-col justify-center'>
+                  <h1 className='cursor-pointer text-3xl font-bold text-primary line-clamp-2'
+                  onClick={() => navigate(`/detailberita/${item.id}`)}>{item.judulBerita}</h1>
+                  <p className='cursor-pointer line-clamp-4'
+                  onClick={() => navigate(`/detailberita/${item.id}`)}>{item.isiBerita} </p>
+                </div>
+              </>
+            ))}
           </div>
         </div>
         <div className='mt-6'>
           <h1 className='text-4xl font-bold'>Pengumuman</h1>
           <hr className="mt-1 border-t-4 border-orange mb-5" />
-          <Accordion
-            title="Pembentukan KPPS Pilkada 2024"
-            content="Dalam rangka pembentukan KPPS untuk Pemilihan Gubernur dan Wakil Gubernur, Bupati dan Wakil Bupati, dan Wali Kota dan Wakil Wali Kota Tahun 2024, Komisi Pemilihan Umum Kabupaten Pati mengundang Warga Negara Indonesia yang memenuhi persyaratan "
-          />
-          <Accordion
-            title="Pembentukan PPDP"
-            content="SESUAI KPKPU Nomor 475 Tahun 2024 Pengumuman pendaftaran Pantarlih/PPDP 13 - 17 Juni 2024 Penerimaan Pendaftaran Calon Pantarlih 13 - 19 Juni 2024 Penelitian Administrasi Calon Pantarlihan"
-          />
-          <Accordion
-            title="Pengumuman Hasil Calon Anggota KPPS"
-            content="PENGUMUMAN HASIL SELEKSI CALON ANGGOTA KELOMPOK PENYELENGGARA PEMUNGUTAN SUARA PADA PEMILIHAN UMUM TAHUN 2024 RT Valencia Berdasarkan Berita Acara Rapat Pleno PPS Rt Valencia"
-          />
+            {dataPengumuman.map((item, index) => (
+              <>
+                <Accordion
+                  title={item.judulPengumuman}
+                  content={item.isiPengumuman}
+                />
+              </>
+            ))}
+          
         </div>
       </div>
     </div>
