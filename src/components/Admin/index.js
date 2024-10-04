@@ -23,17 +23,6 @@ const Admin = () => {
       }
     };
 
-    const fetchDataDelete = async () => {
-      try {
-        // Mengambil semua dokumen dari koleksi
-        const querySnapshot = await getDocs(collection(db, COLLECTION_DELETE));
-        setJmlDataDelete(querySnapshot.size); // Menghitung jumlah dokumen
-        
-      } catch (error) {
-        console.error('Error fetching data from Firestore:', error);
-      }
-    };
-
     const fetchDataUser = async () => {
       try {
         // Mengambil semua dokumen dari koleksi
@@ -46,7 +35,6 @@ const Admin = () => {
       }
     };
 
-    fetchDataDelete();
     fetchDataUser();
     fetchData();
   }, []);
@@ -94,7 +82,7 @@ const Admin = () => {
             <div className='flex justify-between'>
               <div>
                 <h1 className='text-white font-semibold'>Jumlah Penduduk</h1>
-                <h1 className='text-white font-bold'>{jmlDataUser - jmlDataDelete}</h1>
+                <h1 className='text-white font-bold'>{jmlDataUser}</h1>
               </div>
               <div>
                 <img src={imgJmlPenduduk} width={50} alt=''/>
