@@ -97,6 +97,7 @@ const Edit = () => {
         setNik(pendudukSnapshot.data().nik)
         setTtl(pendudukSnapshot.data().ttl)
         setAlamat(pendudukSnapshot.data().alamat)
+        setJk(pendudukSnapshot.data().jk)
         setAgama(pendudukSnapshot.data().agama)
         setStatus(pendudukSnapshot.data().status)
         setPekerjaan(pendudukSnapshot.data().pekerjaan)
