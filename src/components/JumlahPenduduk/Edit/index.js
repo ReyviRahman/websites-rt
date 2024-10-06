@@ -98,7 +98,7 @@ const Edit = () => {
         setTtl(pendudukSnapshot.data().ttl)
         setAlamat(pendudukSnapshot.data().alamat)
         setAgama(pendudukSnapshot.data().agama)
-        setStatus(pendudukSnapshot.data().agama)
+        setStatus(pendudukSnapshot.data().status)
         setPekerjaan(pendudukSnapshot.data().pekerjaan)
         Swal.close()
       } else {
