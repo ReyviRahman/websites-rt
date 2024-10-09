@@ -95,6 +95,8 @@ const ListBerita = () => {
         });
         const dataCopy = dataPengumuman.filter(dataa => dataa.id !== id);
         setDataPengumuman(dataCopy);
+      } else {
+        Swal.close();
       }
     });
   };
