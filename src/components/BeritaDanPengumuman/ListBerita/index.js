@@ -64,6 +64,8 @@ const ListBerita = () => {
         });
         const dataCopy = data.filter(dataa => dataa.id !== id);
         setData(dataCopy);
+      } else {
+        Swal.close();
       }
     });
   };

@@ -95,6 +95,8 @@ const ListKeuangan = () => {
         });
         setTotalSaldo(totalPemasukan - totalPengeluaran);
         setData(dataCopy);
+      } else {
+        Swal.close();
       }
     });
   };
